@@ -1,11 +1,9 @@
 #include "ruby_bridge.h"
-#include <ruby.h>
 #include <fstream>
-#include <string>
 
 using std::fstream;
 using std::ios;
-using std::string;
+using std::to_string;
 
 RubyBridge::RubyBridge(): last_execution(new int)
 {
@@ -25,13 +23,26 @@ RubyBridge::~RubyBridge()
 
 bool RubyBridge::last_exec(){ return (*last_execution) == 0; }
 
-bool RubyBridge::exec(const char* instuction)
+string RubyBridge::process_rb_value(rb_value v)
 {
-	rb_eval_string_protect(instuction, last_execution);
-	return last_exec();
+	string s = "";
+	
+	if(TYPE(v) == T_NIL){ s = "nil"; }
+	else if(TYPE(v) == T_FIXNUM){ s = to_string(NUM2DBL(v)); }
+	else if(TYPE(v) == T_STRING or TYPE(v) == T_SYMBOL){ s = string(RSTRING_PTR(v)); }
+	
+	return s;
 }
 
-bool RubyBridge::exec_file(const char* file_name)
+string RubyBridge::exec(const char* instuction)
+{
+	rb_value result = rb_eval_string_protect(instuction, last_execution);
+	string sresult = "";
+	if(last_exec()){ sresult = process_rb_value(result);	}
+	return sresult;
+}
+
+string RubyBridge::exec_file(const char* file_name)
 {
  	string tmp = "", s = "";
   fstream f;
@@ -42,6 +53,8 @@ bool RubyBridge::exec_file(const char* file_name)
 	 	s += tmp+"\n";
   }
   f.close();
-	rb_eval_string_protect(s.c_str(), last_execution);
-	return last_exec();
+	rb_value result = rb_eval_string_protect(s.c_str(), last_execution);
+	string sresult = "";
+	if(last_exec()){ sresult = process_rb_value(result);	}
+	return sresult;
 }
