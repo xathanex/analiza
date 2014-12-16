@@ -28,9 +28,8 @@ string RubyBridge::process_rb_value(rb_value v)
 	string s = "";
 	
 	if(TYPE(v) == T_NIL){ s = "nil"; }
-	else if(TYPE(v) == T_FIXNUM){ s = to_string(NUM2DBL(v)); }
+	else if(TYPE(v) == T_FIXNUM or TYPE(v) == T_FLOAT){ s = to_string(NUM2DBL(v)); }
 	else if(TYPE(v) == T_STRING or TYPE(v) == T_SYMBOL){ s = string(RSTRING_PTR(v)); }
-	
 	return s;
 }
 
@@ -57,4 +56,10 @@ string RubyBridge::exec_file(const char* file_name)
 	string sresult = "";
 	if(last_exec()){ sresult = process_rb_value(result);	}
 	return sresult;
+}
+
+rb_value RubyBridge::define_global_method(const char* name, rb_value func(int, rb_value*, rb_value))
+{
+	rb_define_global_function(name, (rb_value(*)(...))func, -1);
+	return 0;
 }
