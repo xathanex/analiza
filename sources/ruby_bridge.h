@@ -21,6 +21,7 @@ public:
 	
 	void define_global_method(const char*, rb_value func(int, rb_value*, rb_value));
 	rb_value define_class(const char*, rb_value = rb_cObject);
+	void define_method(rb_value, const char*, rb_value func(int, rb_value*, rb_value));
 	
 	bool last_exec();
 	

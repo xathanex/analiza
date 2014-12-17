@@ -66,3 +66,9 @@ rb_value RubyBridge::define_class(const char* name, rb_value super_class)
 	(*last_execution) = 0;
 	return rb_define_class(name, super_class);
 }
+
+void RubyBridge::define_method(rb_value klass, const char* name, rb_value func(int, rb_value*, rb_value))
+{
+	(*last_execution) = 0;
+	rb_define_method(klass, name, (rb_value(*)(...))func, -1);
+}

@@ -28,7 +28,7 @@ void define_ruby_global_method_test()
 	assert(stod(s) == 5.99);
 }
 
-void define_ruby_class()
+void define_ruby_class_test()
 {
 	RubyBridge& rb_bridge = RubyBridge::initialize();
 	
@@ -55,11 +55,23 @@ void define_ruby_class()
 	assert(rb_bridge.last_exec());
 }
 
+void define_ruby_method_test()
+{
+	RubyBridge& rb_bridge = RubyBridge::initialize();
+	rb_bridge.define_method(rb_bridge.define_class("A"), "meth", getX);
+	
+	assert(stod(rb_bridge.exec("A.new.meth")) == 5.99);
+	assert(rb_bridge.last_exec());
+}
+
+
+
 int main()
 {
 	exec_string_test();
 	exec_file_test();
 	define_ruby_global_method_test();
-	define_ruby_class();
+	define_ruby_class_test();
+	define_ruby_method_test();
 	return 0;
 }
