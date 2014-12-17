@@ -19,7 +19,8 @@ public:
 	string exec(const char*);
 	string exec_file(const char*);
 	
-	rb_value define_global_method(const char*, rb_value func(int, rb_value*, rb_value));
+	void define_global_method(const char*, rb_value func(int, rb_value*, rb_value));
+	rb_value define_class(const char*, rb_value = rb_cObject);
 	
 	bool last_exec();
 	
