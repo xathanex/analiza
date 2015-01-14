@@ -1,7 +1,5 @@
 #include "ruby_ship.h"
 
-string RubyShip::rb_class_dir = "ships/";
-
 RubyBridge& RubyShip::bridge = RubyBridge::initialize();
 
 RubyShip::RubyShip(const char* class_name): name(class_name)
@@ -9,13 +7,33 @@ RubyShip::RubyShip(const char* class_name): name(class_name)
 	string cap_name = name;
 	cap_name[0] = toupper(cap_name[0]);
 	rb_value rb_class = bridge.define_class(name.c_str());
-	bridge.exec_file((rb_class_dir+name+".rb").c_str());
+	bridge.exec_file(("ships/"+name+".rb").c_str());
 	bridge.exec(("@"+name+" = "+cap_name+".new").c_str());
 }
 
 RubyShip::~RubyShip(){}
 
 const char* RubyShip::getName(){ return name.c_str(); }
+
+const string RubyShip::getRubyObj(){ return "@"+name; }
+
+TurnData& RubyShip::getTurnData()
+{
+	td.energy = stod(bridge.exec(getRubyObj()+".energy"));
+	td.move = stod(bridge.exec(getRubyObj()+".move"));
+	td.turn = stod(bridge.exec(getRubyObj()+".turn"));
+	td.max_speed = stod(bridge.exec(getRubyObj()+".max_speed"));
+	td.max_turn_speed = stod(bridge.exec(getRubyObj()+".max_turn_speed"));
+	td.radar_turn = stod(bridge.exec(getRubyObj()+".radar_turn"));
+	td.radar_max_turn_speed = stod(bridge.exec(getRubyObj()+".radar_max_turn_speed"));
+	td.gun_turn = stod(bridge.exec(getRubyObj()+".gun_turn"));
+	td.gun_max_turn_speed = stod(bridge.exec(getRubyObj()+".gun_max_turn_speed"));
+	
+	string s = bridge.exec(getRubyObj()+".fire_power");
+	if(s == "nil"){ td.fire_power = 0; td.fire = false; }
+	else { td.fire_power = stod(s); td.fire = true; }
+	return td;
+}
 
 bool RubyShip::onScannedShip(ScannedShipEvent e)
 {

@@ -14,6 +14,8 @@ RubyBridge::RubyBridge(): last_execution(new int)
 
   const char* options[]  =  { "", "-enil", 0 };
   ruby_exec_node(ruby_options(2, (char**)options));
+  
+  exec_file("ruby_classes/ruby_ship.rb");
 }
 
 RubyBridge::~RubyBridge()

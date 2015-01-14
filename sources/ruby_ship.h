@@ -19,14 +19,18 @@ public:
 	bool onBulletHitBullet(BulletHitBulletEvent);
 	bool onShipHit(ShipHitEvent);
 
-	TurnData getTurnData();
+	TurnData& getTurnData();
 	
 	static string rb_class_dir;
 	static RubyBridge& bridge;
 
 protected:
+
+	const string getRubyObj();
+
 	const string name;
 	rb_value self;
+	TurnData td;
 };
 
 #endif

@@ -3,7 +3,9 @@
 
 struct TurnData
 {
-	double move, turn, max_speed, radar_turn, radar_max_speed, gun_turn, gun_speed, fire_power;
+	double energy, move, turn, max_speed, max_turn_speed, radar_turn, radar_max_turn_speed, gun_turn, gun_max_turn_speed, fire_power;
+	bool fire, fired;
+	int last_fired_bullet_id;
 };
 
 #endif
