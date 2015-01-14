@@ -41,6 +41,8 @@ string RubyBridge::exec(const char* instuction)
 	return sresult;
 }
 
+string RubyBridge::exec(string instruction){ return exec(instruction.c_str()); }
+
 string RubyBridge::exec_file(const char* file_name)
 {
  	string tmp = "", s = "";

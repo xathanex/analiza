@@ -17,6 +17,7 @@ public:
 	}
 	
 	string exec(const char*);
+	string exec(string);
 	string exec_file(const char*);
 	
 	void define_global_method(const char*, rb_value func(int, rb_value*, rb_value));

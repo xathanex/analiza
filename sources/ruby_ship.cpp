@@ -1,4 +1,3 @@
-#include <cstdio>
 #include "ruby_ship.h"
 
 string RubyShip::rb_class_dir = "ships/";
@@ -22,31 +21,31 @@ bool RubyShip::onScannedShip(ScannedShipEvent e)
 {
 	char tmp[256] = {};
 	sprintf(tmp, "event = { bearing: %g, distance: %g, heading: %g, energy: %g, name: \'%s\', speed: %i }\n", e.bearing, e.distance, e.heading, e.energy, e.name, e.speed);
-	bridge.exec(tmp+"@"+name+".onScannedShip event");
+	bridge.exec(string(tmp)+"@"+name+".onScannedShip event");
 	return bridge.last_exec();
 }
 
 bool RubyShip::onHitByBullet(HitByBulletEvent e)
 {
 	char tmp[256] = {};
-	sprintf(tmp, "event = { bullet: Bullet.new(%g, \'%s\') }\n", e.bullet.getWeight(), e.bullet.getShip().getName());
-	bridge.exec(tmp+"@"+name+".onHitByBullet event");
+	sprintf(tmp, "event = { bullet: @bullets[%i] }\n", e.bullet_id);
+	bridge.exec(string(tmp)+"@"+name+".onHitByBullet event");
 	return bridge.last_exec();
 }
 
 bool RubyShip::onBulletHit(BulletHitEvent e)
 {
 	char tmp[256] = {};
-	sprintf(tmp, "event = { bullet: Bullet.new(%g, \'%s\'),  }\n", e.bullet.getWeight(), e.bullet.getShip().getName());
-	bridge.exec(tmp+"@"+name+".onHitByBullet event");
+	sprintf(tmp, "event = { bullet: @bullets[%i] }\n", e.bullet_id);
+	bridge.exec(string(tmp)+"@"+name+".onHitByBullet event");
 	return bridge.last_exec();
 }
 
 bool RubyShip::onBulletHitBullet(BulletHitBulletEvent e)
 {
 	char tmp[256] = {};
-	sprintf(tmp, "event = { bearing: %g, distance: %g, heading: %g, energy: %g, name: \'%s\', speed: %i }\n", e.bearing, e.distance, e.heading, e.energy, e.name, e.speed);
-	bridge.exec(tmp+"@"+name+".onBulletHitBullet event");
+	sprintf(tmp, "event = { bullet: @bullets[%i], bulletHit: @bullets[%i]}\n", e.bullet_id, e.bulletHit_id);
+	bridge.exec(string(tmp)+"@"+name+".onBulletHitBullet event");
 	return bridge.last_exec();
 }
 
@@ -54,7 +53,7 @@ bool RubyShip::onShipHit(ShipHitEvent e)
 {
 	char tmp[256] = {};
 	sprintf(tmp, "event = { bearing: %g, distance: %g, heading: %g, energy: %g, name: \'%s\' }\n", e.bearing, e.distance, e.heading, e.energy, e.name);
-	bridge.exec(tmp+"@"+name+".onShipHit event");	
+	bridge.exec(string(tmp)+"@"+name+".onShipHit event");	
 	return bridge.last_exec();
 }
 

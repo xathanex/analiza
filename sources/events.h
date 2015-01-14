@@ -1,8 +1,6 @@
 #ifndef EVENTS_H
 #define EVENTS_H
 
-#include "bullet.h"
-
 struct ScannedShipEvent
 {
 	const double bearing, distance, heading, energy;
@@ -12,19 +10,19 @@ struct ScannedShipEvent
 
 struct HitByBulletEvent
 {
-	const Bullet bullet;
+	const int bullet_id;
 };
 
 struct BulletHitEvent
 {
-	const Bullet bullet;
+	const int bullet_id;
 	const char* name;
 	const double energy;
 };
 
 struct BulletHitBulletEvent
 {
-	const Bullet bullet, bulletHit;
+	const int bullet_id, bulletHit_id;
 };
 
 struct ShipHitEvent
