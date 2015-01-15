@@ -18,3 +18,10 @@ RubyBullet::~RubyBullet()
 }
 
 unsigned RubyBullet::getID() const { return id-1; }
+
+void RubyBullet::setPos(short x, short y)
+{
+	char tmp[256] = {};
+	sprintf(tmp, "@bullets[%i].setPos(%i, %i)", getID(), x, y);
+	bridge.exec(tmp);	
+}

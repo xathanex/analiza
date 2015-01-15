@@ -12,7 +12,10 @@ public:
 	unsigned getID() const;
 	
 	static RubyBridge& bridge;
-	
+
+protected:
+	void setPos(short, short);
+
 private:
 	unsigned id;
 };
