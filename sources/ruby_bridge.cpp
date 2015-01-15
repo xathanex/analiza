@@ -16,6 +16,8 @@ RubyBridge::RubyBridge(): last_execution(new int)
   ruby_exec_node(ruby_options(2, (char**)options));
   
   exec_file("ruby_classes/ruby_ship.rb");
+  exec_file("ruby_classes/ruby_bullet.rb");
+  exec("@bullets = []");
 }
 
 RubyBridge::~RubyBridge()
@@ -30,6 +32,8 @@ string RubyBridge::process_rb_value(rb_value v)
 	string s = "";
 	
 	if(TYPE(v) == T_NIL){ s = "nil"; }
+	else if(TYPE(v) == T_TRUE){ s = "1"; }
+	else if(TYPE(v) == T_FALSE){ s = "0"; }
 	else if(TYPE(v) == T_FIXNUM or TYPE(v) == T_FLOAT){ s = to_string(NUM2DBL(v)); }
 	else if(TYPE(v) == T_STRING or TYPE(v) == T_SYMBOL){ s = string(RSTRING_PTR(v)); }
 	return s;

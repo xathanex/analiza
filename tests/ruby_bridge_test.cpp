@@ -10,6 +10,10 @@ void exec_string_test()
 	RubyBridge& rb_bridge = RubyBridge::initialize();
 	assert(stod(rb_bridge.exec("1+1")) == 2);
 	assert(rb_bridge.last_exec());
+	assert(stoi(rb_bridge.exec("1 == 1")) == 1);
+	assert(rb_bridge.last_exec());
+	assert(stoi(rb_bridge.exec("1 == 0")) == 0);
+	assert(rb_bridge.last_exec());
 }
 
 void exec_file_test()
