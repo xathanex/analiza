@@ -13,6 +13,8 @@ public:
 
 	const char* getName();
 
+	bool run();
+
 	bool onScannedShip(ScannedShipEvent);
 	bool onHitByBullet(HitByBulletEvent);
 	bool onBulletHit(BulletHitEvent);

@@ -20,6 +20,8 @@ const string RubyShip::getRubyObj(){ return "@"+name; }
 TurnData& RubyShip::getTurnData()
 {
 	td.energy = stod(bridge.exec(getRubyObj()+".energy"));
+	td.x = stoi(bridge.exec(getRubyObj()+".x"));
+	td.y = stoi(bridge.exec(getRubyObj()+".y"));
 	td.move = stod(bridge.exec(getRubyObj()+".move"));
 	td.turn = stod(bridge.exec(getRubyObj()+".turn"));
 	td.max_speed = stod(bridge.exec(getRubyObj()+".max_speed"));
@@ -33,6 +35,12 @@ TurnData& RubyShip::getTurnData()
 	if(s == "nil"){ td.fire_power = 0; td.fire = false; }
 	else { td.fire_power = stod(s); td.fire = true; }
 	return td;
+}
+
+bool run()
+{
+	bridge.exec(string(tmp)+"@"+name+".run");
+	return bridge.last_exec();	
 }
 
 bool RubyShip::onScannedShip(ScannedShipEvent e)
