@@ -22,9 +22,9 @@ TurnData& RubyShip::getTurnData()
 	td.energy = stod(bridge.exec(getRubyObj()+".energy"));
 	td.x = stoi(bridge.exec(getRubyObj()+".x"));
 	td.y = stoi(bridge.exec(getRubyObj()+".y"));
-	td.move = stod(bridge.exec(getRubyObj()+".move"));
+	td.move = stoi(bridge.exec(getRubyObj()+".move"));
 	td.turn = stod(bridge.exec(getRubyObj()+".turn"));
-	td.max_speed = stod(bridge.exec(getRubyObj()+".max_speed"));
+	td.max_speed = stoi(bridge.exec(getRubyObj()+".max_speed"));
 	td.max_turn_speed = stod(bridge.exec(getRubyObj()+".max_turn_speed"));
 	td.radar_turn = stod(bridge.exec(getRubyObj()+".radar_turn"));
 	td.radar_max_turn_speed = stod(bridge.exec(getRubyObj()+".radar_max_turn_speed"));
@@ -37,9 +37,36 @@ TurnData& RubyShip::getTurnData()
 	return td;
 }
 
+RubyShip::updateTurnData()
+{
+	char tmp[256]={};
+	sprintf(tmp, ".energy = %g", td.energy);
+	bridge.exec("@"+name+tmp);
+	sprintf(tmp, ".x = %i", td.x);
+	bridge.exec("@"+name+tmp);
+	sprintf(tmp, ".y = %i", td.y);
+	bridge.exec("@"+name+tmp);
+	sprintf(tmp, ".move = %i", td.move);
+	bridge.exec("@"+name+tmp);
+	sprintf(tmp, ".turn = %g", td.turn);
+	bridge.exec("@"+name+tmp);
+	sprintf(tmp, ".max_speed = %i", td.max_speed);
+	bridge.exec("@"+name+tmp);
+	sprintf(tmp, ".max_turn_speed = %g", td.max_turn_speed);
+	bridge.exec("@"+name+tmp);
+	sprintf(tmp, ".radar_turn = %g", td.radar_turn);
+	bridge.exec("@"+name+tmp);
+	sprintf(tmp, ".max_radar_turn_speed = %g", td.max_radar_turn_speed);
+	bridge.exec("@"+name+tmp);
+	sprintf(tmp, ".gun_turn = %g", td.gun_turn);
+	bridge.exec("@"+name+tmp);
+	sprintf(tmp, ".max_gun_turn_speed = %g", td.max_gun_turn_speed);
+	bridge.exec("@"+name+tmp);
+}
+
 bool run()
 {
-	bridge.exec(string(tmp)+"@"+name+".run");
+	bridge.exec("@"+name+".run");
 	return bridge.last_exec();	
 }
 

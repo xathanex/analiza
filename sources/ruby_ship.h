@@ -22,6 +22,7 @@ public:
 	bool onShipHit(ShipHitEvent);
 
 	TurnData& getTurnData();
+	void updateTurnData();
 	
 	static string rb_class_dir;
 	static RubyBridge& bridge;
