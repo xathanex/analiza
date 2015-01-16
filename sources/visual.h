@@ -3,7 +3,7 @@
 
 class Visual {
 	private:
-		int x, 				// środek, lewy dolny róg czy lewy górny róg?
+		int x,
 		    y, 
 		    sizeX, 
 		    sizeY;
