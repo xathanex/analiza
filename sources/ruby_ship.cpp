@@ -37,7 +37,7 @@ TurnData& RubyShip::getTurnData()
 	return td;
 }
 
-RubyShip::updateTurnData()
+void RubyShip::updateTurnData()
 {
 	char tmp[256]={};
 	sprintf(tmp, ".energy = %g", td.energy);
@@ -56,15 +56,15 @@ RubyShip::updateTurnData()
 	bridge.exec("@"+name+tmp);
 	sprintf(tmp, ".radar_turn = %g", td.radar_turn);
 	bridge.exec("@"+name+tmp);
-	sprintf(tmp, ".max_radar_turn_speed = %g", td.max_radar_turn_speed);
+	sprintf(tmp, ".radar_max_turn_speed = %g", td.radar_max_turn_speed);
 	bridge.exec("@"+name+tmp);
 	sprintf(tmp, ".gun_turn = %g", td.gun_turn);
 	bridge.exec("@"+name+tmp);
-	sprintf(tmp, ".max_gun_turn_speed = %g", td.max_gun_turn_speed);
+	sprintf(tmp, ".gun_max_turn_speed = %g", td.gun_max_turn_speed);
 	bridge.exec("@"+name+tmp);
 }
 
-bool run()
+bool RubyShip::run()
 {
 	bridge.exec("@"+name+".run");
 	return bridge.last_exec();	
@@ -73,7 +73,7 @@ bool run()
 bool RubyShip::onScannedShip(ScannedShipEvent e)
 {
 	char tmp[256] = {};
-	sprintf(tmp, "event = { bearing: %g, distance: %g, heading: %g, energy: %g, name: \'%s\', speed: %i }\n", e.bearing, e.distance, e.heading, e.energy, e.name, e.speed);
+	sprintf(tmp, "event = { bearing: %g, distance: %i, heading: %g, energy: %g, name: \'%s\', speed: %i }\n", e.bearing, e.distance, e.heading, e.energy, e.name, e.speed);
 	bridge.exec(string(tmp)+"@"+name+".onScannedShip event");
 	return bridge.last_exec();
 }
@@ -89,8 +89,8 @@ bool RubyShip::onHitByBullet(HitByBulletEvent e)
 bool RubyShip::onBulletHit(BulletHitEvent e)
 {
 	char tmp[256] = {};
-	sprintf(tmp, "event = { bullet: @bullets[%i] }\n", e.bullet_id);
-	bridge.exec(string(tmp)+"@"+name+".onHitByBullet event");
+	sprintf(tmp, "event = { bullet: @bullets[%i], target_name: '%s', target_energy: %g }\n", e.bullet_id, e.name, e.energy);
+	bridge.exec(string(tmp)+"@"+name+".onBulletHit event");
 	return bridge.last_exec();
 }
 
@@ -105,7 +105,7 @@ bool RubyShip::onBulletHitBullet(BulletHitBulletEvent e)
 bool RubyShip::onShipHit(ShipHitEvent e)
 {
 	char tmp[256] = {};
-	sprintf(tmp, "event = { bearing: %g, distance: %g, heading: %g, energy: %g, name: \'%s\' }\n", e.bearing, e.distance, e.heading, e.energy, e.name);
+	sprintf(tmp, "event = { bearing: %g, distance: %i, heading: %g, energy: %g, name: '%s' }\n", e.bearing, e.distance, e.heading, e.energy, e.name);
 	bridge.exec(string(tmp)+"@"+name+".onShipHit event");	
 	return bridge.last_exec();
 }

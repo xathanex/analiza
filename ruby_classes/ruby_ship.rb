@@ -12,6 +12,8 @@ class RubyShip
 		@lastBulletShot = nil
 		@fire_power = nil
 		@fired = false
+		@y = 0
+		@x = 0
 	end
 
 	def x
@@ -128,6 +130,9 @@ class RubyShip
 	end
 
 	def onBulletHit bulletHitEvent
+	end
+	
+	def onShipHit shipHitEvent
 	end
 
 	def run

@@ -3,32 +3,34 @@
 
 struct ScannedShipEvent
 {
-	const double bearing, distance, heading, energy;
+	const double bearing, heading, energy;
+	const unsigned distance;
 	const char* name;
 	const short speed;
 };
 
 struct HitByBulletEvent
 {
-	const int bullet_id;
+	const unsigned bullet_id;
 };
 
 struct BulletHitEvent
 {
-	const int bullet_id;
+	const unsigned bullet_id;
 	const char* name;
 	const double energy;
 };
 
 struct BulletHitBulletEvent
 {
-	const int bullet_id, bulletHit_id;
+	const unsigned bullet_id, bulletHit_id;
 };
 
 struct ShipHitEvent
 {
 	const char* name;
-	const double bearing, distance, heading, energy;
+	const double bearing, heading, energy;
+	const unsigned distance;
 };
 #endif
 
