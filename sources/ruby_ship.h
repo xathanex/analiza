@@ -13,6 +13,8 @@ public:
 
 	const char* getName();
 
+	bool run();
+
 	bool onScannedShip(ScannedShipEvent);
 	bool onHitByBullet(HitByBulletEvent);
 	bool onBulletHit(BulletHitEvent);
@@ -20,6 +22,7 @@ public:
 	bool onShipHit(ShipHitEvent);
 
 	TurnData& getTurnData();
+	void updateTurnData();
 	
 	static string rb_class_dir;
 	static RubyBridge& bridge;
