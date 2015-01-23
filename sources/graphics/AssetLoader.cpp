@@ -1,0 +1,74 @@
+#include "AssetLoader.h"
+#include <iostream>
+#include <fstream>
+#include <sstream> 
+#include <string>
+#include <stdlib.h>
+#include "Vector3.h"
+
+using namespace std;
+
+vector<Model> AssetLoader::models;
+
+int AssetLoader::loadModel(string modelFile) {
+    string parsedLine;
+
+    ifstream file(modelFile.c_str());
+    Model model = Model();
+    
+    if(file.is_open()) {
+        while(getline(file, parsedLine)) {
+            stringstream tmp(parsedLine);
+            string parsedFraze;
+            
+            if(parsedLine.substr(0, 2) == "v ") {
+                float c[3];
+                for(int i=0; i<4; i++) {
+                    getline(tmp, parsedFraze, ' ');
+                    if(i>0)
+                        c[i-1] = atof(parsedFraze.c_str());
+                }
+                Vector3 v = Vector3(c[0], c[1], c[2]);
+                model.addVertex(v);
+                
+            } else if(parsedLine.substr(0, 2) == "vn") {
+                float c[3];
+                for(int i=0; i<4; i++) {
+                    getline(tmp, parsedFraze, ' ');
+                    if(i>0)
+                        c[i-1] = atof(parsedFraze.c_str());
+                }
+                Vector3 n = Vector3(c[0], c[1], c[2]);
+                model.addNormal(n);
+                
+            } else if(parsedLine.substr(0, 2) == "f ") {
+                
+                int v[3];
+                int n[3];
+                for(int i=0; i<4; i++) {
+                    getline(tmp, parsedFraze, ' ');
+                    if(i>0) {
+                        size_t delimiterPos = parsedFraze.find("//");
+                        v[i-1] = atoi(parsedFraze.substr(0, delimiterPos).c_str());
+                        n[i-1] = atoi(parsedFraze.substr(delimiterPos+2, parsedFraze.length()-(delimiterPos+2)).c_str());
+                    }
+                    
+                }
+                model.addFace(v[0], v[1], v[2], n[0], n[1], n[2]);
+                
+            }
+            
+        }
+        
+        AssetLoader::models.push_back(model);
+        
+    } else {
+        cout<<"err";
+        file.close();
+    }
+    return 0;
+}
+
+AssetLoader::AssetLoader() {}
+AssetLoader::~AssetLoader() {}
+

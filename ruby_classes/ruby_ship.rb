@@ -12,6 +12,24 @@ class RubyShip
 		@lastBulletShot = nil
 		@fire_power = nil
 		@fired = false
+		@y = 0
+		@x = 0
+	end
+
+	def x
+		return @x
+	end
+
+	def x= value
+		@x = value
+	end
+
+	def y
+		return @y
+	end
+
+	def y= value
+		@y = value
 	end
 
 	def fire_power
@@ -113,4 +131,35 @@ class RubyShip
 
 	def onBulletHit bulletHitEvent
 	end
+	
+	def onShipHit shipHitEvent
+	end
+
+	def run
+	end
+
+	def setAhead mv
+		@move = mv
+	end
+
+	def setBack mv
+		setAhead -mv
+	end
+
+	def setTurnLeft angle
+		@turn = angle
+	end
+
+	def setTurnRight angle
+		setTurnLeft -angle
+	end
+
+	def setTurnRadarLeft angle
+		@radar_turn = angle
+	end
+
+	def setTurnRadarRight angle
+		setTurnRadarLeft -angle
+	end
+	
 end

@@ -1,29 +1,39 @@
 #ifndef SHIP_H
 #define SHIP_H
 
-#include "visual.h"
-#include "turret.h"
-#include "radar.h"
-#include "turn_data.h"
+#include <string>
+
 #include "battle_settings.h"
 #include "ruby_ship.h"
+#include "turn_data.h"
+#include "ship_position.h"
+#include "graphics/Scene.h"
+#include "graphics/SceneObjects.h"
 
-class Ship: public Visual {
+class Ship {
 	private:
-		Turret turret;
-		Radar radar;
-		RubyShip & rubyShip;
-		TurnData & turnData;
-		BattleSettings & battleSettings;
+        RubyShip rubyShip;
+        TurnData & turnData;
+        ShipPosition shipPosition;
+        BattleSettings & battleSettings;
+        SceneObjectShip * visual;
 
-		const double radius;
-		double energy, speed, acceleration;
-		int fireDelay;
+		std::string name;
+        short fireDelay;
+		double energy, speed, acceleration, radius;
 		
 	public:		
-		Ship(int x, int y, double angle, BattleSettings battleSettings,
-				RubyShip & rShip);
-		void shoot(double bulletWeight);
+		Ship(BattleSettings & battleSettings, ShipPosition startPosition,
+                const char * shipName);
+		bool canShoot();
+		void move(unsigned short x, unsigned short y);
+		bool checkShipCollision (short x, short y);
+        void pushPosition();
+        SceneObjectShip * getSceneObject();
+        RubyShip & getRubyShip();
+        void decrementFireDelay();
+        bool isOnTheScreen(unsigned short x, unsigned short y);
+
 };
 
 #endif

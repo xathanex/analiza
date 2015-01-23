@@ -20,9 +20,11 @@ const string RubyShip::getRubyObj(){ return "@"+name; }
 TurnData& RubyShip::getTurnData()
 {
 	td.energy = stod(bridge.exec(getRubyObj()+".energy"));
-	td.move = stod(bridge.exec(getRubyObj()+".move"));
+	td.x = stoi(bridge.exec(getRubyObj()+".x"));
+	td.y = stoi(bridge.exec(getRubyObj()+".y"));
+	td.move = stoi(bridge.exec(getRubyObj()+".move"));
 	td.turn = stod(bridge.exec(getRubyObj()+".turn"));
-	td.max_speed = stod(bridge.exec(getRubyObj()+".max_speed"));
+	td.max_speed = stoi(bridge.exec(getRubyObj()+".max_speed"));
 	td.max_turn_speed = stod(bridge.exec(getRubyObj()+".max_turn_speed"));
 	td.radar_turn = stod(bridge.exec(getRubyObj()+".radar_turn"));
 	td.radar_max_turn_speed = stod(bridge.exec(getRubyObj()+".radar_max_turn_speed"));
@@ -35,10 +37,43 @@ TurnData& RubyShip::getTurnData()
 	return td;
 }
 
+void RubyShip::updateTurnData()
+{
+	char tmp[256]={};
+	sprintf(tmp, ".energy = %g", td.energy);
+	bridge.exec("@"+name+tmp);
+	sprintf(tmp, ".x = %i", td.x);
+	bridge.exec("@"+name+tmp);
+	sprintf(tmp, ".y = %i", td.y);
+	bridge.exec("@"+name+tmp);
+	sprintf(tmp, ".move = %i", td.move);
+	bridge.exec("@"+name+tmp);
+	sprintf(tmp, ".turn = %g", td.turn);
+	bridge.exec("@"+name+tmp);
+	sprintf(tmp, ".max_speed = %i", td.max_speed);
+	bridge.exec("@"+name+tmp);
+	sprintf(tmp, ".max_turn_speed = %g", td.max_turn_speed);
+	bridge.exec("@"+name+tmp);
+	sprintf(tmp, ".radar_turn = %g", td.radar_turn);
+	bridge.exec("@"+name+tmp);
+	sprintf(tmp, ".radar_max_turn_speed = %g", td.radar_max_turn_speed);
+	bridge.exec("@"+name+tmp);
+	sprintf(tmp, ".gun_turn = %g", td.gun_turn);
+	bridge.exec("@"+name+tmp);
+	sprintf(tmp, ".gun_max_turn_speed = %g", td.gun_max_turn_speed);
+	bridge.exec("@"+name+tmp);
+}
+
+bool RubyShip::run()
+{
+	bridge.exec("@"+name+".run");
+	return bridge.last_exec();	
+}
+
 bool RubyShip::onScannedShip(ScannedShipEvent e)
 {
 	char tmp[256] = {};
-	sprintf(tmp, "event = { bearing: %g, distance: %g, heading: %g, energy: %g, name: \'%s\', speed: %i }\n", e.bearing, e.distance, e.heading, e.energy, e.name, e.speed);
+	sprintf(tmp, "event = { bearing: %g, distance: %i, heading: %g, energy: %g, name: \'%s\', speed: %i }\n", e.bearing, e.distance, e.heading, e.energy, e.name, e.speed);
 	bridge.exec(string(tmp)+"@"+name+".onScannedShip event");
 	return bridge.last_exec();
 }
@@ -54,8 +89,8 @@ bool RubyShip::onHitByBullet(HitByBulletEvent e)
 bool RubyShip::onBulletHit(BulletHitEvent e)
 {
 	char tmp[256] = {};
-	sprintf(tmp, "event = { bullet: @bullets[%i] }\n", e.bullet_id);
-	bridge.exec(string(tmp)+"@"+name+".onHitByBullet event");
+	sprintf(tmp, "event = { bullet: @bullets[%i], target_name: '%s', target_energy: %g }\n", e.bullet_id, e.name, e.energy);
+	bridge.exec(string(tmp)+"@"+name+".onBulletHit event");
 	return bridge.last_exec();
 }
 
@@ -70,7 +105,7 @@ bool RubyShip::onBulletHitBullet(BulletHitBulletEvent e)
 bool RubyShip::onShipHit(ShipHitEvent e)
 {
 	char tmp[256] = {};
-	sprintf(tmp, "event = { bearing: %g, distance: %g, heading: %g, energy: %g, name: \'%s\' }\n", e.bearing, e.distance, e.heading, e.energy, e.name);
+	sprintf(tmp, "event = { bearing: %g, distance: %i, heading: %g, energy: %g, name: '%s' }\n", e.bearing, e.distance, e.heading, e.energy, e.name);
 	bridge.exec(string(tmp)+"@"+name+".onShipHit event");	
 	return bridge.last_exec();
 }

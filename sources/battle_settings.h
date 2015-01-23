@@ -3,14 +3,14 @@
 
 struct BattleSettings {
     // turn settings
-    double maxSpeed, maxTurnSpeed, radarMaxTurnSpeed, gunMaxTurnSpeed,
-            maxAcceleration, maxDeceleration;
-    int fireDelay;
+    double maxTurnSpeed, radarMaxTurnSpeed, cannonMaxTurnSpeed,
+            maxBulletSpeed;
+    unsigned short maxShipSpeed, fireDelay;
 
     // battlefield settings
-    int battlefieldSizeX, battlefieldSizeY, maxEnergy,
-            minBulletWeight, maxBulletWeight;
-    double shipRadius;
+    unsigned short battlefieldSizeX, battlefieldSizeY, maxEnergy;
+    double shipRadius, minBulletWeight,
+            maxBulletWeight; // radius of five circles in ship
 };
 
 # endif
