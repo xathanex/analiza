@@ -22,7 +22,7 @@ class Engine {
 		// returns true if all ships except one was destroyed
         void moveBullets();
         void moveShips();
-		void moveAndCheckObjects();
+		void moveAndCheck();
 		bool executeTurn();
         void destroyBullet();
 };

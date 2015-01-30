@@ -7,7 +7,7 @@
 Engine::Engine(std::vector<const char *> shipNames): {
     // sets start positions for all ships
     // TODO: randomowe pozycje statków
-    // TODO: wykrywanie kolizji
+    // TODO: wykrywanie kolizji pozycji statków
     ShipPosition shipPos1, shipPos2;
 
     shipPos1.posX = BattleSettings::battlefieldSizeX / (unsigned short)4;
@@ -45,10 +45,13 @@ void Engine::moveBullets() {
 }
 
 void Engine::moveShips() {
-
+    unsigned short it = 0;
+    while (it < ships.size()) {
+        ships[it] -> go();
+    }
 }
 
-void Engine::moveAndCheckObjects() {
+void Engine::moveAndCheck() {
     std::vector <short> destroyedByBullet;
     std::vector <short> destroyedByShip;
     short temp1, temp2;
@@ -104,18 +107,12 @@ void Engine::moveAndCheckObjects() {
 bool Engine::executeTurn() {
     /*
     TODO: zaimplementować wykonywanie się tury
-    Kolejność wykonywania się elementów:
-    1. Battle view is (re)painted.
-    3. Time is updated (time = time + 1).
-    4. All bullets move and check for collisions.
-    This includes firing bullets.
-    5. All robots move (gun, radar, heading, acceleration,
-    velocity, distance, in that order).
-    6. All robots perform scans (and collect team messages).
-    8. Each robot processes its event queue.
+    true: go to next turn
+    false: game over
     */
 
-    // 1. 2. 3.
+    // repaints objects on screen and prepares them to next turn
+    // also executes ruby code
     int i;
     for (i = 0; i < ships.size(); ++i) {
         ships[i] -> pushPosition();
@@ -125,15 +122,11 @@ bool Engine::executeTurn() {
         bullets[i] -> pushPosition();
     }
 
+    // moves all visible objects and checks for collisions
+    moveAndCheck();
 
-    // 4.
-    moveAndCheckBullets();
+    // performs scan
 
-    // 5.
 
-    // 6.
-
-    // 7.
-
-    // 8.
+    return true;
 }

@@ -19,7 +19,7 @@ class Ship {
 
 		std::string name;
         short fireDelay;
-		double energy, speed, acceleration, radius;
+		double energy, tempSpeed, speed, acceleration, radius;
 		
 	public:		
 		Ship(ShipPosition startPosition, const char * shipName);
@@ -31,7 +31,8 @@ class Ship {
         RubyShip & getRubyShip();
         void decrementFireDelay();
         bool isOnTheScreen(unsigned short x, unsigned short y);
-
+        void getReady();
+        void go();
 
 };
 

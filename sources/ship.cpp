@@ -79,6 +79,8 @@ void Ship::pushPosition() {
     turnData.radar_turn = shipPosition.radarDirection;
     turnData.gun_turn = shipPosition.cannonDirection;
     rubyShip.updateTurnData();
+
+    getReady();
 }
 
 SceneObjectShip * Ship::getSceneObject() {
@@ -96,4 +98,25 @@ RubyShip & Ship::getRubyShip() {
 bool Ship::isOnTheScreen(unsigned short x, unsigned short y) {
     return (x <= BattleSettings::battlefieldSizeX && x >= 0
             && y <= BattleSettings::battlefieldSizeY && y >= 0);
+}
+
+void Ship::getReady() {
+    double tmp = 0;
+    double a = BattleSettings::shipAccuracy;
+    for (double i = a; i < speed; i += a)
+        tmp += i;
+    if (turnData.move <= tmp)
+        if (speed < a) speed = 0;
+        else speed -= a;
+    else
+        speed += a;
+    tempSpeed = speed;
+}
+
+void Ship::go() {
+    if (tempSpeed > 0) {
+        tempPosX += cos(dir);
+        tempPosY += sin(dir);
+        --tempSpeed;
+    }
 }

@@ -5,12 +5,13 @@
 
 namespace BattleSettings {
     // turn settings
-    const unsigned short maxShipSpeed = 8;
+    const double maxShipSpeed = 8.0;
     const double maxTurnSpeed = M_PI / 8.0;
     const double radarMaxTurnSpeed = M_PI / 8.0;
     const double cannonMaxTurnSpeed = M_PI / 8.0;
     const double maxBulletSpeed = 10.0;
-    const unsigned short fireDelay = 15;
+    const double shipAccuracy = 0.5;
+    const unsigned short fireDelay = 30;
 
     // battlefield settings
     const unsigned short battlefieldSizeX = 800;
