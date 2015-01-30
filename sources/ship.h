@@ -14,8 +14,7 @@ class Ship {
 	private:
         RubyShip rubyShip;
         TurnData & turnData;
-        ShipPosition shipPosition;
-        BattleSettings & battleSettings;
+        ShipPosition & shipPosition;
         SceneObjectShip * visual;
 
 		std::string name;
@@ -23,16 +22,16 @@ class Ship {
 		double energy, speed, acceleration, radius;
 		
 	public:		
-		Ship(BattleSettings & battleSettings, ShipPosition startPosition,
-                const char * shipName);
+		Ship(ShipPosition startPosition, const char * shipName);
+        std::string getName();
 		bool canShoot();
-		void move(unsigned short x, unsigned short y);
 		bool checkShipCollision (short x, short y);
         void pushPosition();
         SceneObjectShip * getSceneObject();
         RubyShip & getRubyShip();
         void decrementFireDelay();
         bool isOnTheScreen(unsigned short x, unsigned short y);
+
 
 };
 

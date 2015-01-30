@@ -12,17 +12,17 @@
 
 class Engine {
 	private:
-		std::vector <Ship> ships;
-		std::vector <Bullet> bullets;
-		BattleSettings battleSettings;
+		std::vector <Ship*> ships;
+		std::vector <Bullet*> bullets;
         Scene * scene;
-        unsigned nextBulletId;
 		
 	public:
 		Engine(std::vector shipNames);
 
 		// returns true if all ships except one was destroyed
-		void moveAndCheckBullets();
+        void moveBullets();
+        void moveShips();
+		void moveAndCheckObjects();
 		bool executeTurn();
         void destroyBullet();
 };

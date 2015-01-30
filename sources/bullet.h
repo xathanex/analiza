@@ -2,29 +2,32 @@
 #define BULLET_H
 
 #include "ship.h"
+#include "graphics/SceneObjects.h"
+#include "ruby_bullet.h"
+#include "bullet_properties.h"
 
 class Bullet {
 	private:
+        RubyBullet * rubyBullet;
+        SceneObjectProjectile * visual;
 		Ship & ship;
-		double weight, speed, maxSpeed, dir;
-        unsigned short posX, posY;
-        unsigned id;
+        BulletProperties properties;
 
-        double tempSpeed, tempPosX, tempPosY;
 	
 	public:	
 		Bullet(Ship & ship, double weight, double maxSpeed,
                 unsigned short x, unsigned short y,
-                double direction, unsigned id);
+                double direction);
 
 		Ship & getShip();
 		double getWeight();
         unsigned getId();
-        unsigned short getTempX();
-        unsigned short getTempY();
+        unsigned short getX();
+        unsigned short getY();
 
-        void getReady();
-		bool go();
+		bool goAndCheck();
+
+        void pushPosition();
 
 };
 

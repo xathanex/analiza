@@ -13,7 +13,6 @@ public:
 	
 	static RubyBridge& bridge;
 
-protected:
 	void setPos(short, short);
 
 private:
