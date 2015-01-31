@@ -31,6 +31,8 @@ class Bullet {
 
         void pushPosition();
 
+        bool isOnTheScreen(double x, double y);
+
 };
 
 #endif

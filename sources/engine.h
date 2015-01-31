@@ -17,14 +17,18 @@ class Engine {
         Scene * scene;
 		
 	public:
-		Engine(std::vector shipNames);
+		Engine(std::vector<const char *> shipNames);
 
 		// returns true if all ships except one was destroyed
         void moveBullets();
         void moveShips();
-        void bulletHitBulletEvents(std::vector <short> & index);
+        void bulletHitBulletEvent(int i1, int i2);
+        void bulletHitShipEvent(int bulletIterator, int shipIterator);
+        void shipHitShipEvents(int i1, int i2);
 		void moveAndCheck();
 		bool executeTurn();
+
+        void checkBulletShipCollision(int bulletIterator, int shipIterator);
 };
 
 #endif

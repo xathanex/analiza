@@ -26,8 +26,7 @@ bool Bullet::goAndCheck() {
         properties.posX += cos(properties.dir);
         properties.posY += sin(properties.dir);
         --tempSpeed;
-        return ship.isOnTheScreen(
-                (unsigned short)properties.posX, (unsigned short)properties.posY);
+        return isOnTheScreen(properties.posX, properties.posY);
     }
     else return false;
 }
@@ -53,4 +52,9 @@ void Bullet::pushPosition() {
 
     // getReady
     tempSpeed = BattleSettings::bulletSpeed;
+}
+
+bool Bullet::isOnTheScreen(double x, double y) {
+    return (x <= BattleSettings::battlefieldSizeX && x >= 0
+            && y <= BattleSettings::battlefieldSizeY && y >= 0);
 }

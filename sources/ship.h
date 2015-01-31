@@ -17,22 +17,28 @@ class Ship {
         ShipProperties & properties;
         SceneObjectShip * visual;
 
-		std::string name;
+		const char * name;
         short fireDelay;
 		double energy, tempSpeed, speed;
 		
 	public:		
 		Ship(ShipProperties startPosition, const char * shipName);
-        std::string getName();
+        const char * getName();
 		bool canShoot();
-		bool checkShipCollision (short x, short y);
+		bool isShipCollision (double x, double y);
+        double getX();
+        double getY();
+        double getEnergy();
+        double getDirection();
         void pushPosition();
         SceneObjectShip * getSceneObject();
         RubyShip & getRubyShip();
         void decrementFireDelay();
-        bool isOnTheScreen(unsigned short x, unsigned short y);
+        bool isOnTheScreen();
         void getReady();
         void go();
+        void undoMove();
+        bool decrementEnergy(double value);
 
 };
 

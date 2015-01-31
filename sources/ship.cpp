@@ -46,7 +46,7 @@ Ship::Ship(ShipProperties startPosition,
     rubyShip.run();
 }
 
-std::string Ship::getName() {
+const char * Ship::getName() {
     return name;
 }
 
@@ -58,12 +58,14 @@ bool Ship::canShoot() {
         turnData.fire_power <= BattleSettings::maxBulletWeight);
 }
 
-bool Ship::checkShipCollision (short x, short y) {
-
+bool Ship::isShipCollision (double x, double y) {
+    if (abs(x - properties.posX) * 2 <= BattleSettings::shipRadius)
+        return true;
+    return abs(y - properties.posY) * 2 <= BattleSettings::shipRadius;
 }
 
 void Ship::pushPosition() {
-    visual -> setPosition(properties.posX, properties.posY);
+    visual -> setPosition((int)properties.posX, (int)properties.posY);
     visual -> setDirection(
             cos(properties.shipDirection), sin(properties.shipDirection));
     visual -> setCannonDirection(
@@ -71,8 +73,8 @@ void Ship::pushPosition() {
     visual -> setRadarDirection(
             cos(properties.radarDirection), sin(properties.radarDirection));
 
-    turnData.x = properties.posX;
-    turnData.y = properties.posY;
+    turnData.x = (unsigned short)properties.posX;
+    turnData.y = (unsigned short)properties.posY;
     turnData.turn = properties.shipDirection;
     turnData.radar_turn = properties.radarDirection;
     turnData.gun_turn = properties.cannonDirection;
@@ -93,9 +95,15 @@ RubyShip & Ship::getRubyShip() {
     return rubyShip;
 }
 
-bool Ship::isOnTheScreen(unsigned short x, unsigned short y) {
-    return (x <= BattleSettings::battlefieldSizeX && x >= 0
-            && y <= BattleSettings::battlefieldSizeY && y >= 0);
+bool Ship::isOnTheScreen() {
+    double x = properties.posX;
+    double y = properties.posY;
+    double r = BattleSettings::shipRadius;
+
+    return ((x + r) <= BattleSettings::battlefieldSizeX
+            && (x - r) >= 0
+            && (y + r) <= BattleSettings::battlefieldSizeY
+            && (y - r) >= 0);
 }
 
 void Ship::getReady() {
@@ -115,6 +123,40 @@ void Ship::go() {
     if (tempSpeed > 0) {
         properties.posX += cos(properties.shipDirection);
         properties.posX += sin(properties.shipDirection);
-        --tempSpeed;
+        if (isOnTheScreen()) {
+            --tempSpeed;
+            --turnData.move;
+        } else
+            undoMove();
     }
+}
+
+void Ship::undoMove() {
+    // fires after collision with huge object (wall, another ship)
+    tempSpeed = 0;
+    speed = 0;
+    properties.posX -= cos(properties.shipDirection);
+    properties.posX -= sin(properties.shipDirection);
+    ++turnData.move;
+}
+
+double Ship::getX() {
+    return properties.posX;
+}
+
+double Ship::getY() {
+    return properties.posY;
+}
+
+bool Ship::decrementEnergy(double value) {
+    energy -= value;
+    return energy <= 0;
+}
+
+double Ship::getEnergy() {
+    return energy;
+}
+
+double Ship::getDirection() {
+    return properties.shipDirection;
 }
