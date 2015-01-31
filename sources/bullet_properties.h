@@ -2,11 +2,7 @@
 #define BULLET_PROPERTIES
 
 struct BulletProperties {
-    double weight, speed, maxSpeed, dir;
-    double tempSpeed, posX, posY;
-
-    void getReady();
-    bool go();
+    double weight, dir, posX, posY;
 };
 
 #endif

@@ -2,13 +2,11 @@
 
 #include <cmath>
 
-Bullet::Bullet(Ship & ship, double weight, double maxSpeed, unsigned short x,
+Bullet::Bullet(Ship & ship, double weight, unsigned short x,
         unsigned short y, double direction): ship(ship){
     rubyBullet = new RubyBullet(ship.getName().c_str(), x, y, weight);
 
     properties.dir = direction;
-    properties.maxSpeed = maxSpeed;
-    properties.speed = 0;
     properties.weight = weight;
     properties.posX = x;
     properties.posY = y;
@@ -23,10 +21,14 @@ double Bullet::getWeight() {
 }
 
 bool Bullet::goAndCheck() {
-    if(properties.go())
-        // bullet is moved
+    if(tempSpeed > 0) {
+        // bullet can move
+        properties.posX += cos(properties.dir);
+        properties.posY += sin(properties.dir);
+        --tempSpeed;
         return ship.isOnTheScreen(
                 (unsigned short)properties.posX, (unsigned short)properties.posY);
+    }
     else return false;
 }
 
@@ -49,5 +51,6 @@ void Bullet::pushPosition() {
 
     rubyBullet -> setPos((short)properties.posX, (short)properties.posY);
 
-    properties.getReady();
+    // getReady
+    tempSpeed = BattleSettings::bulletSpeed;
 }

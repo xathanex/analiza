@@ -8,13 +8,15 @@ Engine::Engine(std::vector<const char *> shipNames): {
     // sets start positions for all ships
     // TODO: randomowe pozycje statków
     // TODO: wykrywanie kolizji pozycji statków
-    ShipPosition shipPos1, shipPos2;
 
-    shipPos1.posX = BattleSettings::battlefieldSizeX / (unsigned short)4;
-    shipPos1.posY = BattleSettings::battlefieldSizeY / (unsigned short)2;
+    /*
+    ShipProperties shipPos1, shipPos2;
+
+    shipPos1.posX = BattleSettings::battlefieldSizeX / 4;
+    shipPos1.posY = BattleSettings::battlefieldSizeY / 2;
     shipPos2.posX = BattleSettings::battlefieldSizeX -
-            (BattleSettings::battlefieldSizeX / (unsigned short)4);
-    shipPos2.posY = BattleSettings::battlefieldSizeY / (unsigned short)2;
+            (BattleSettings::battlefieldSizeX / 4);
+    shipPos2.posY = BattleSettings::battlefieldSizeY / 2;
 
     shipPos1.shipDirection = 0.0;
     shipPos1.cannonDirection = 0.0;
@@ -31,6 +33,7 @@ Engine::Engine(std::vector<const char *> shipNames): {
     scene = new Scene();
     scene -> registerSceneObject(ships[0] -> getSceneObject());
     scene -> registerSceneObject(ships[1] -> getSceneObject());
+    */
 
 }
 void Engine::moveBullets() {
@@ -51,13 +54,38 @@ void Engine::moveShips() {
     }
 }
 
+void Engine::bulletHitBulletEvents(std::vector <short> & index) {
+    if (index.size() > 0) {
+        short i1, i2;
+        for (int i = 0; i < index.size(); i = i + 2) {
+            i1 = index[i];
+            i2 = index[i + 1];
+
+            BulletHitBulletEvent e1 {
+                    bullets[i1] -> getId(),
+                    bullets[i2] -> getId()
+            };
+            bullets[i1] -> getShip().getRubyShip().onBulletHitBullet(e1);
+
+            BulletHitBulletEvent e2 {
+                    bullets[i2] -> getId(),
+                    bullets[i1] -> getId()
+            };
+            bullets[i2] -> getShip().getRubyShip().onBulletHitBullet(e2);
+
+            bullets.erase(bullets.begin() + i1);
+            bullets.erase(bullets.begin() + i2);
+        }
+        index.clear();
+    }
+}
+
 void Engine::moveAndCheck() {
     std::vector <short> destroyedByBullet;
     std::vector <short> destroyedByShip;
-    short temp1, temp2;
 
     short time, it, k;
-    for (time = 0; time < BattleSettings::maxBulletSpeed; ++time) {
+    for (time = 0; time < BattleSettings::bulletSpeed; ++time) {
         moveBullets();
         moveShips();
         for (it = 0; it < bullets.size(); ++it) {
@@ -70,25 +98,7 @@ void Engine::moveAndCheck() {
                 }
             }
         }
-        if (destroyedByBullet.size() > 0) {
-            for (it = 0; it < destroyedByBullet.size(); it = it + (short)2) {
-                temp1 = destroyedByBullet[it];
-                temp2 = destroyedByBullet[it + 1];
-                BulletHitBulletEvent e1 {
-                        bullets[temp1] -> getId(),
-                        bullets[temp2] -> getId()
-                };
-                bullets[temp1] -> getShip().getRubyShip().onBulletHitBullet(e1);
-                BulletHitBulletEvent e2 {
-                        bullets[temp2] -> getId(),
-                        bullets[temp1] -> getId()
-                };
-                bullets[temp2] -> getShip().getRubyShip().onBulletHitBullet(e2);
-                bullets.erase(bullets.begin() + temp1);
-                bullets.erase(bullets.begin() + temp2);
-            }
-            destroyedByBullet.clear();
-        }
+        bulletHitBulletEvents(destroyedByBullet);
         /* źle! statki muszą poruszać się w tym samym czasie co pociski!
         for (it = 0; it < bullets.size(); ++it) {
             for (k = 0; k < ships.size(); ++k) {

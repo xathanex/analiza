@@ -1,17 +1,5 @@
-// #include "Visual.h"
-#include <iostream>
-
-using namespace std;
-
-void main_menu() {
-	// ładowanie ekranu startowego, ustawienia etc etc
-}
-
-void start() {
-	main_menu();
-	cout << "Hi!";
-}
+#include "engine.h"
 
 int main () {
-	start();
+	// create Engine object and evaluate
 }

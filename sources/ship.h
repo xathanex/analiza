@@ -6,7 +6,7 @@
 #include "battle_settings.h"
 #include "ruby_ship.h"
 #include "turn_data.h"
-#include "ship_position.h"
+#include "ship_properties.h"
 #include "graphics/Scene.h"
 #include "graphics/SceneObjects.h"
 
@@ -14,15 +14,15 @@ class Ship {
 	private:
         RubyShip rubyShip;
         TurnData & turnData;
-        ShipPosition & shipPosition;
+        ShipProperties & properties;
         SceneObjectShip * visual;
 
 		std::string name;
         short fireDelay;
-		double energy, tempSpeed, speed, acceleration, radius;
+		double energy, tempSpeed, speed;
 		
 	public:		
-		Ship(ShipPosition startPosition, const char * shipName);
+		Ship(ShipProperties startPosition, const char * shipName);
         std::string getName();
 		bool canShoot();
 		bool checkShipCollision (short x, short y);

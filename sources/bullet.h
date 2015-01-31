@@ -13,18 +13,20 @@ class Bullet {
 		Ship & ship;
         BulletProperties properties;
 
+        double tempSpeed;
+
 	
 	public:	
-		Bullet(Ship & ship, double weight, double maxSpeed,
+		Bullet(Ship & ship, double weight,
                 unsigned short x, unsigned short y,
                 double direction);
 
 		Ship & getShip();
 		double getWeight();
+
         unsigned getId();
         unsigned short getX();
         unsigned short getY();
-
 		bool goAndCheck();
 
         void pushPosition();

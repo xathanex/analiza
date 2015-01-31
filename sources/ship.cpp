@@ -1,43 +1,41 @@
 #include "ship.h"
 #include <cmath>
 
-Ship::Ship(ShipPosition startPosition,
+Ship::Ship(ShipProperties startPosition,
         const char * shipName = "Ship"): rubyShip(shipName),
                                          turnData(rubyShip.getTurnData()),
-                                         shipPosition(startPosition),
+                                         properties(startPosition),
                                          name(shipName),
-                                         speed(0),
-                                         acceleration(0) {
+                                         speed(0) {
 
     // set ship visual object parameters
     visual = new SceneObjectShip();
-    visual -> setPosition(shipPosition.posX, shipPosition.posY);
+    visual -> setPosition((int)properties.posX, (int)properties.posY);
     visual -> setDirection(
-            cos(shipPosition.shipDirection), sin(shipPosition.shipDirection));
+            cos(properties.shipDirection), sin(properties.shipDirection));
     visual -> setCannonDirection(
-            cos(shipPosition.cannonDirection), sin(shipPosition.cannonDirection));
+            cos(properties.cannonDirection), sin(properties.cannonDirection));
     visual -> setRadarDirection(
-            cos(shipPosition.radarDirection), sin(shipPosition.radarDirection));
+            cos(properties.radarDirection), sin(properties.radarDirection));
 
 	// set default values
     fireDelay = BattleSettings::fireDelay;
     energy = BattleSettings::maxEnergy;
-	radius = BattleSettings::shipRadius;
 
 	// set default values in turnData
     turnData.energy = energy;
     turnData.move = 0;
-    turnData.x = shipPosition.posX;
-    turnData.y = shipPosition.posY;
+    turnData.x = (unsigned short)properties.posX;
+    turnData.y = (unsigned short)properties.posY;
 
-    turnData.turn = shipPosition.shipDirection;
-    turnData.radar_turn = shipPosition.radarDirection;
-    turnData.gun_turn = shipPosition.cannonDirection;
+    turnData.turn = properties.shipDirection;
+    turnData.radar_turn = properties.radarDirection;
+    turnData.gun_turn = properties.cannonDirection;
 
-    turnData.max_speed = BattleSettings::maxShipSpeed;
+    turnData.max_speed = (unsigned short)BattleSettings::maxShipSpeed;
     turnData.max_turn_speed = BattleSettings::maxTurnSpeed;
-    turnData.radar_max_turn_speed = BattleSettings::radarMaxTurnSpeed;
-    turnData.gun_max_turn_speed = BattleSettings::cannonMaxTurnSpeed;
+    turnData.radar_max_turn_speed = BattleSettings::radarTurnSpeed;
+    turnData.gun_max_turn_speed = BattleSettings::cannonTurnSpeed;
 
     turnData.fire_power =
             (BattleSettings::maxBulletWeight + BattleSettings::minBulletWeight)/2;
@@ -65,19 +63,19 @@ bool Ship::checkShipCollision (short x, short y) {
 }
 
 void Ship::pushPosition() {
-    visual -> setPosition(shipPosition.posX, shipPosition.posY);
+    visual -> setPosition(properties.posX, properties.posY);
     visual -> setDirection(
-            cos(shipPosition.shipDirection), sin(shipPosition.shipDirection));
+            cos(properties.shipDirection), sin(properties.shipDirection));
     visual -> setCannonDirection(
-            cos(shipPosition.cannonDirection), sin(shipPosition.cannonDirection));
+            cos(properties.cannonDirection), sin(properties.cannonDirection));
     visual -> setRadarDirection(
-            cos(shipPosition.radarDirection), sin(shipPosition.radarDirection));
+            cos(properties.radarDirection), sin(properties.radarDirection));
 
-    turnData.x = shipPosition.posX;
-    turnData.y = shipPosition.posY;
-    turnData.turn = shipPosition.shipDirection;
-    turnData.radar_turn = shipPosition.radarDirection;
-    turnData.gun_turn = shipPosition.cannonDirection;
+    turnData.x = properties.posX;
+    turnData.y = properties.posY;
+    turnData.turn = properties.shipDirection;
+    turnData.radar_turn = properties.radarDirection;
+    turnData.gun_turn = properties.cannonDirection;
     rubyShip.updateTurnData();
 
     getReady();
@@ -115,8 +113,8 @@ void Ship::getReady() {
 
 void Ship::go() {
     if (tempSpeed > 0) {
-        tempPosX += cos(dir);
-        tempPosY += sin(dir);
+        properties.posX += cos(properties.shipDirection);
+        properties.posX += sin(properties.shipDirection);
         --tempSpeed;
     }
 }
