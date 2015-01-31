@@ -23,23 +23,26 @@ class Ship {
 		
 	public:		
 		Ship(ShipProperties startPosition, const char * shipName);
-        const char * getName();
+
 		bool canShoot();
 		bool isShipCollision (double x, double y);
+        bool isOnTheScreen();
+
+        void decrementFireDelay();
+        bool decrementEnergy(double value);
+
+        void getReady();
+        void go();
+        void undoMove();
+        void pushPosition();
+
+        SceneObjectShip * getSceneObject();
+        RubyShip & getRubyShip();
+        const char * getName();
         double getX();
         double getY();
         double getEnergy();
         double getDirection();
-        void pushPosition();
-        SceneObjectShip * getSceneObject();
-        RubyShip & getRubyShip();
-        void decrementFireDelay();
-        bool isOnTheScreen();
-        void getReady();
-        void go();
-        void undoMove();
-        bool decrementEnergy(double value);
-
 };
 
 #endif

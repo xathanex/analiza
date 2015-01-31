@@ -36,6 +36,78 @@ Engine::Engine(std::vector<const char *> shipNames): {
     */
 
 }
+
+void Engine::bulletHitBulletEvent(int i1, int i2) {
+    BulletHitBulletEvent e1 {
+            bullets[i1] -> getId(),
+            bullets[i2] -> getId()
+    };
+    bullets[i1] -> getShip().getRubyShip().onBulletHitBullet(e1);
+
+    BulletHitBulletEvent e2 {
+            bullets[i2] -> getId(),
+            bullets[i1] -> getId()
+    };
+    bullets[i2] -> getShip().getRubyShip().onBulletHitBullet(e2);
+
+    bullets.erase(bullets.begin() + i1);
+    bullets.erase(bullets.begin() + i2);
+}
+
+void Engine::shipHitShipEvents(int i1, int i2) {
+    ShipHitEvent e1 {
+            ships[i2] -> getName(),
+            ships[i2] -> getDirection(),
+            atan2(ships[i2] -> getY(), ships[i2] -> getX()) - ships[i2] -> getDirection(),
+            ships[i2] -> getEnergy(),
+            0 // distance between two balls-like ships?
+    };
+    ships[i1] -> getRubyShip().onShipHit(e1);
+
+    ShipHitEvent e2 {
+            ships[i1] -> getName(),
+            ships[i1] -> getDirection(),
+            atan2(ships[i1] -> getY(), ships[i1] -> getX()) - ships[i1] -> getDirection(),
+            ships[i1] -> getEnergy(),
+            0 // distance between two balls-like ships?
+    };
+    ships[i2] -> getRubyShip().onShipHit(e2);
+}
+
+void Engine::bulletHitShipEvent(int bulletIterator, int shipIterator) {
+    BulletHitEvent be {
+            bullets[bulletIterator] -> getId(),
+            ships[shipIterator] -> getName(),
+            ships[shipIterator] -> getEnergy() - bullets[bulletIterator] -> getWeight()
+    };
+    bullets[bulletIterator] -> getShip().getRubyShip().onBulletHit(be);
+
+    HitByBulletEvent se {
+            bullets[bulletIterator] -> getId()
+    };
+    ships[shipIterator] -> getRubyShip().onHitByBullet(se);
+}
+
+void Engine::checkBulletShipCollision(int bulletIterator, int shipIterator) {
+    double bx, by, sx, sy;
+    bx = bullets[bulletIterator] -> getX();
+    by = bullets[bulletIterator] -> getY();
+    sx = ships[shipIterator] -> getX();
+    sy = ships[shipIterator] -> getY();
+    if (abs(bx - sx) <= BattleSettings::shipRadius &&
+            abs(by - sy) <= BattleSettings::shipRadius) {
+        bulletHitShipEvent(bulletIterator, shipIterator);
+        if (ships[shipIterator] -> decrementEnergy(
+                bullets[bulletIterator] -> getWeight())) {
+            ships.erase(ships.begin() + shipIterator);
+        }
+        bullets.erase(bullets.begin() + bulletIterator);
+    }
+
+
+
+}
+
 void Engine::moveBullets() {
     unsigned short it = 0;
     while (it < bullets.size()) {
@@ -70,43 +142,6 @@ void Engine::moveShips() {
         }
         ++it;
     }
-}
-
-void Engine::bulletHitBulletEvent(int i1, int i2) {
-            BulletHitBulletEvent e1 {
-                    bullets[i1] -> getId(),
-                    bullets[i2] -> getId()
-            };
-            bullets[i1] -> getShip().getRubyShip().onBulletHitBullet(e1);
-
-            BulletHitBulletEvent e2 {
-                    bullets[i2] -> getId(),
-                    bullets[i1] -> getId()
-            };
-            bullets[i2] -> getShip().getRubyShip().onBulletHitBullet(e2);
-
-            bullets.erase(bullets.begin() + i1);
-            bullets.erase(bullets.begin() + i2);
-}
-
-void Engine::checkBulletShipCollision(int bulletIterator, int shipIterator) {
-    double bx, by, sx, sy;
-    bx = bullets[bulletIterator] -> getX();
-    by = bullets[bulletIterator] -> getY();
-    sx = ships[shipIterator] -> getX();
-    sy = ships[shipIterator] -> getY();
-    if (abs(bx - sx) <= BattleSettings::shipRadius &&
-            abs(by - sy) <= BattleSettings::shipRadius) {
-        bulletHitShipEvent(bulletIterator, shipIterator);
-        if (ships[shipIterator] -> decrementEnergy(
-                bullets[bulletIterator] -> getWeight())) {
-            ships.erase(ships.begin() + shipIterator);
-        }
-        bullets.erase(bullets.begin() + bulletIterator);
-    }
-
-
-
 }
 
 void Engine::moveAndCheck() {
@@ -149,38 +184,4 @@ bool Engine::executeTurn() {
 
 
     return true;
-}
-
-void Engine::bulletHitShipEvent(int bulletIterator, int shipIterator) {
-    BulletHitEvent be {
-            bullets[bulletIterator] -> getId(),
-            ships[shipIterator] -> getName(),
-            ships[shipIterator] -> getEnergy() - bullets[bulletIterator] -> getWeight()
-    };
-    bullets[bulletIterator] -> getShip().getRubyShip().onBulletHit(be);
-
-    HitByBulletEvent se {
-            bullets[bulletIterator] -> getId()
-    };
-    ships[shipIterator] -> getRubyShip().onHitByBullet(se);
-}
-
-void Engine::shipHitShipEvents(int i1, int i2) {
-    ShipHitEvent e1 {
-        ships[i2] -> getName(),
-        ships[i2] -> getDirection(),
-        atan2(ships[i2] -> getY(), ships[i2] -> getX()) - ships[i2] -> getDirection(),
-        ships[i2] -> getEnergy(),
-        0 // distance between two balls-like ships?
-    };
-    ships[i1] -> getRubyShip().onShipHit(e1);
-
-    ShipHitEvent e2 {
-        ships[i1] -> getName(),
-        ships[i1] -> getDirection(),
-        atan2(ships[i1] -> getY(), ships[i1] -> getX()) - ships[i1] -> getDirection(),
-        ships[i1] -> getEnergy(),
-        0 // distance between two balls-like ships?
-    };
-    ships[i2] -> getRubyShip().onShipHit(e2);
 }

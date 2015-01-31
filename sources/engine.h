@@ -19,16 +19,19 @@ class Engine {
 	public:
 		Engine(std::vector<const char *> shipNames);
 
-		// returns true if all ships except one was destroyed
-        void moveBullets();
-        void moveShips();
         void bulletHitBulletEvent(int i1, int i2);
         void bulletHitShipEvent(int bulletIterator, int shipIterator);
         void shipHitShipEvents(int i1, int i2);
+
+        void checkBulletShipCollision(int bulletIterator, int shipIterator);
+
+        void moveBullets();
+        void moveShips();
+
 		void moveAndCheck();
 		bool executeTurn();
 
-        void checkBulletShipCollision(int bulletIterator, int shipIterator);
+
 };
 
 #endif

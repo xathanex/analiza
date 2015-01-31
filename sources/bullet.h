@@ -15,23 +15,21 @@ class Bullet {
 
         double tempSpeed;
 
-	
+
 	public:	
 		Bullet(Ship & ship, double weight,
                 unsigned short x, unsigned short y,
                 double direction);
 
-		Ship & getShip();
-		double getWeight();
+        bool isOnTheScreen(double x, double y);
+		bool goAndCheck();
+        void pushPosition();
 
+        Ship & getShip();
+        double getWeight();
         unsigned getId();
         unsigned short getX();
         unsigned short getY();
-		bool goAndCheck();
-
-        void pushPosition();
-
-        bool isOnTheScreen(double x, double y);
 
 };
 
