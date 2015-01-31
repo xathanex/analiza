@@ -129,8 +129,8 @@ Scene::Scene() {
     
     //Uruchamianie wątku -------------------------------------------------------
     
-    //thread renderer(&Scene::run, this);
-    
+    thread renderer(&Scene::run, this);
+    /*
     SceneObjectShip* ship1 = new SceneObjectShip();
     ship1->setPosition(400, 400);
     ship1->setDirection(-1.0, -1.0);
@@ -153,7 +153,7 @@ Scene::Scene() {
     this->registerSceneObject(ship3);   
     
     this->run();
-    
+    */
 }
 
 void Scene::registerSceneObject (SceneObject* sceneObject) {
