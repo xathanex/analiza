@@ -3,7 +3,7 @@
 
 #include "Model.h"
 #include "Vector3.h"
-
+#include <string>
 
 class SceneObject {
 public:
@@ -21,15 +21,24 @@ public:
 
 class SceneObjectShip : public SceneObject {
 public:
+    static float viewAngle;
+    static float viewRange;
+    static void setViewAngle(float angle);
+    static void setViewRange(float range);
+    
     SceneObjectShip();
     void setCannonDirection(float x, float y);
+    void setViewDirection(float x, float y);
     void draw();
+    void setDescription(string desc);
     
 private:
     Vector3 cannonDirection;
+    Vector3 viewDirection;
     Model* shipModel;
     Model* cannonModel;
-    
+    string  description;
+            
 };
 
 class SceneObjectProjectile : public SceneObject {

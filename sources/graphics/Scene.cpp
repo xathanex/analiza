@@ -21,18 +21,23 @@ void Scene::glInit()
     glLoadIdentity();
     gluPerspective(45.0,1200.0/700.0,1.0,500.0);
     glMatrixMode(GL_MODELVIEW);
-    glEnable(GL_DEPTH_TEST);
     glEnable(GL_LIGHTING);
-    
+    glEnable(GL_COLOR_MATERIAL);
+    glEnable(GL_TEXTURE_2D);
+    glEnable (GL_BLEND);
+    glEnable(GL_DEPTH_TEST);
+    glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+
     
     float fogColor[4] = {0.9, 0.9, 0.9, 1.0};
     glEnable (GL_FOG);
     glFogi (GL_FOG_MODE, GL_LINEAR);
     glFogfv (GL_FOG_COLOR, fogColor);
-    glFogf (GL_FOG_DENSITY, 0.3);
+    glFogf (GL_FOG_DENSITY, 0.2);
     
     glFogf(GL_FOG_START, 1.0);
-    glFogf(GL_FOG_END, 30.0);
+    glFogf(GL_FOG_END, 25.0);
     
     
     glHint (GL_FOG_HINT, GL_NICEST);
@@ -44,7 +49,7 @@ void Scene::display() {
     glLoadIdentity();
     glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
     glRotatef(45, 1, 0, 0);
-    glTranslatef(-12.0, 0-10.0, -25.0);
+    glTranslatef(-12.0, -8.0, -20.0);
     Scene::water->drawWaves();
     for (vector<SceneObject*>::iterator i=this->sceneObjects.begin(); i!=this->sceneObjects.end(); i++) {
         (*i)->draw();
@@ -55,8 +60,8 @@ void Scene::display() {
 void Scene::setLights() {
     glEnable(GL_LIGHT0);
     float lightDirection[4] = {0.2, 0.5, 0.2, 0.0};
-    float diffuse[3] = {1.0, 1.0, 1.0};
-    float ambient[3] = {0.5, 0.5, 0.5};
+    float diffuse[3] = {0.6, 0.6, 0.6};
+    float ambient[3] = {0.12, 0.12, 0.12};
     
     glLightfv(GL_LIGHT0, GL_POSITION, lightDirection);
     glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuse);
@@ -110,8 +115,8 @@ Scene::Scene() {
     
     
     //Tworzenie wody -----------------------------------------------------------
-    Scene::water = new Water(24.0, 30);
-    Scene::water->addWaveSource(-200.0, -200.0, 0.2, 4.0, 0.01);
+    Scene::water = new Water(24.0, 40);
+    Scene::water->addWaveSource(-200.0, -200.0, 0.4, 10.0, 0.01);
     Scene::water->addWaveSource(100.0, 20.0, 0.04, 1.0, 0.02);
     Scene::water->addWaveSource(50.0, 0.0, 0.07, 1.2, 0.015);
 
@@ -119,6 +124,8 @@ Scene::Scene() {
     AssetLoader::loadModel("graphics/meshes/ship.obj");
     AssetLoader::loadModel("graphics/meshes/cannon.obj");
     AssetLoader::loadModel("graphics/meshes/projectile.obj");
+    
+    AssetLoader::loadTexture("graphics/textures/font.bmp");
     
     //Uruchamianie wątku -------------------------------------------------------
     
@@ -128,18 +135,21 @@ Scene::Scene() {
     ship1->setPosition(400, 400);
     ship1->setDirection(-1.0, -1.0);
     ship1->setCannonDirection(-1.0, -1.0); 
+    ship1->setViewDirection(1.0, 0.0); 
     this->registerSceneObject(ship1);   
     
     SceneObjectShip* ship2 = new SceneObjectShip();
     ship2->setPosition(500, 300);
     ship2->setDirection(1.0, 1.0);
-    ship2->setCannonDirection(0.0, 1.0); 
+    ship2->setCannonDirection(1.0, 1.0);
+    ship2->setViewDirection(1.0, 0.0); 
     this->registerSceneObject(ship2);   
 
     SceneObjectShip* ship3 = new SceneObjectShip();
     ship3->setPosition(200, 200);
-    ship3->setDirection(1.0, 0.4);
-    ship3->setCannonDirection(0.0, 1.0); 
+    ship3->setDirection(0.5, 1.5);
+    ship3->setCannonDirection(0.5, 1.5); 
+    ship3->setViewDirection(1.0, 1.0);
     this->registerSceneObject(ship3);   
     
     this->run();

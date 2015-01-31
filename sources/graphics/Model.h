@@ -12,7 +12,7 @@ public:
     
     void addVertex(Vector3 vert);
     void addNormal(Vector3 normal);
-    void addFace(int vert1, int vert2, int vert3, int normal1, int normal2m, int normal3);
+    void addFace(int vert1, int vert2, int vert3, int normal1, int normal2, int normal3);
     void draw();
     
 private:

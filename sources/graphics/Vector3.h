@@ -8,6 +8,8 @@ class Vector3 {
         virtual ~Vector3();
 
         Vector3 operator +(const Vector3 &v);
+        Vector3 operator /(const float &f);
+        Vector3 operator *(const float &f);
         Vector3 operator -(const Vector3 &v);
         Vector3 operator +=(const Vector3 &v);
 

@@ -12,7 +12,9 @@ public:
     virtual ~AssetLoader();
     
     static int loadModel(string modelFile);
+    static int loadTexture(const char* textureFile);
     static vector<Model> models;
+    static vector<int> textures;
     
 private:
 

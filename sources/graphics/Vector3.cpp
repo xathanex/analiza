@@ -20,6 +20,16 @@ Vector3 Vector3::operator +(const Vector3& v) {
 
 }
 
+Vector3 Vector3::operator /(const float& f) {
+    return Vector3(this->x/f, this->y/f, this->z/f);
+
+}
+
+Vector3 Vector3::operator *(const float& f) {
+    return Vector3(this->x*f, this->y*f, this->z*f);
+
+}
+
 Vector3 Vector3::operator +=(const Vector3& v) {
     this->x += v.x;
     this->y += v.y;

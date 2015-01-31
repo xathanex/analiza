@@ -4,11 +4,15 @@
 #include <sstream> 
 #include <string>
 #include <stdlib.h>
+#include <SDL/SDL.h>
+#include <GL/gl.h>
+#include <GL/glu.h>
 #include "Vector3.h"
 
 using namespace std;
 
 vector<Model> AssetLoader::models;
+vector<int> AssetLoader::textures;
 
 int AssetLoader::loadModel(string modelFile) {
     string parsedLine;
@@ -66,8 +70,27 @@ int AssetLoader::loadModel(string modelFile) {
         cout<<"err";
         file.close();
     }
-    return 0;
+    return AssetLoader::models.size()-1;
 }
+
+int AssetLoader::loadTexture(const char* file) {
+    
+        SDL_Surface* img = SDL_LoadBMP(file);
+        unsigned int id;
+        glGenTextures(1, &id);
+        glBindTexture(GL_TEXTURE_2D, id);
+        
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, img->w, img->h, 0, GL_RGBA, GL_UNSIGNED_BYTE, img->pixels);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        SDL_FreeSurface(img);
+        
+        glBindTexture(GL_TEXTURE_2D, 0);
+        AssetLoader::textures.push_back(id);
+        return id;
+        
+}
+
 
 AssetLoader::AssetLoader() {}
 AssetLoader::~AssetLoader() {}
