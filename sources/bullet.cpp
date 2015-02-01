@@ -53,10 +53,10 @@ unsigned Bullet::getId() {
     return rubyBullet -> getID();
 }
 
-unsigned short Bullet::getX() {
-    return (unsigned short) properties.posX;
+double Bullet::getX() {
+    return properties.posX;
 }
 
-unsigned short Bullet::getY() {
-    return (unsigned short) properties.posY;
+double Bullet::getY() {
+    return properties.posY;
 }

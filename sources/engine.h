@@ -29,6 +29,7 @@ class Engine {
         void moveShips();
 
 		void moveAndCheck();
+        void shoot();
 		bool executeTurn();
 
 

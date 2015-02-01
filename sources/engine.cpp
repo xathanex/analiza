@@ -4,7 +4,7 @@
 #include <cmath>
 #include <vector>
 
-Engine::Engine(std::vector<const char *> shipNames): {
+Engine::Engine(std::vector<const char *> shipNames) {
     // sets start positions for all ships
     // TODO: randomowe pozycje statków
     // TODO: wykrywanie kolizji pozycji statków
@@ -158,6 +158,16 @@ void Engine::moveAndCheck() {
 
 }
 
+void Engine::shoot() {
+    for (int i = 0; i < ships.size(); ++i) {
+        if (ships[i] -> canShoot()) {
+            // TODO: builder do tworzenia pocisków
+            // bullets.push_back(new Bullet(ships[i], ))
+        }
+
+    }
+}
+
 bool Engine::executeTurn() {
     /*
     TODO: zaimplementować wykonywanie się tury
@@ -179,6 +189,9 @@ bool Engine::executeTurn() {
     // moves all visible objects and checks for collisions
     moveAndCheck();
     if (ships.size() < 2) return false;
+
+    // performs shoot
+    shoot();
 
     // performs scan
 

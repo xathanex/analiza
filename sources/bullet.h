@@ -28,8 +28,8 @@ class Bullet {
         Ship & getShip();
         double getWeight();
         unsigned getId();
-        unsigned short getX();
-        unsigned short getY();
+        double getX();
+        double getY();
 
 };
 

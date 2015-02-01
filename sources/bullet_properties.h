@@ -2,7 +2,10 @@
 #define BULLET_PROPERTIES
 
 struct BulletProperties {
-    double weight, dir, posX, posY;
+    double weight,
+            dir,
+            posX,
+            posY;
 };
 
 #endif

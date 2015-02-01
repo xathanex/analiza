@@ -51,8 +51,12 @@ Ship::Ship(ShipProperties startPosition,
 bool Ship::canShoot() {
     if (!turnData.fire) return false;
     if (fireDelay != 0) return false;
-    return (turnData.fire_power >= BattleSettings::minBulletWeight &&
-            turnData.fire_power <= BattleSettings::maxBulletWeight);
+    if (turnData.fire_power >= BattleSettings::minBulletWeight &&
+            turnData.fire_power <= BattleSettings::maxBulletWeight) {
+        turnData.fired = true;
+        return true;
+    }
+    return false;
 }
 
 bool Ship::isShipCollision (double x, double y) {
@@ -86,6 +90,8 @@ bool Ship::decrementEnergy(double value) {
 
 
 void Ship::getReady() {
+    turnData.fired = false;
+
     double tmp = 0;
     double a = BattleSettings::shipAccuracy;
     for (double i = a; i < speed; i += a)
@@ -130,9 +136,7 @@ void Ship::pushPosition() {
 
     turnData.x = (unsigned short)properties.posX;
     turnData.y = (unsigned short)properties.posY;
-    turnData.turn = properties.shipDirection;
-    turnData.radar_turn = properties.radarDirection;
-    turnData.gun_turn = properties.cannonDirection;
+    turnData.energy = energy;
     rubyShip.updateTurnData();
 
     getReady();

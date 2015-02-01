@@ -8,9 +8,9 @@ struct TurnData
             gun_turn, gun_max_turn_speed,
             fire_power;
 	short move;
-  unsigned short max_speed, x, y;
-	bool fire, fired;
-	int last_fired_bullet_id;
+    unsigned short max_speed, x, y;
+    bool fire, fired;
+    int last_fired_bullet_id;
 };
 
 #endif
