@@ -6,6 +6,8 @@ Każdy z graczy przed rozpoczęciem gry pisze własny kod sterujący statek, po 
 wpływu na to w jaki sposób się zachowuje. Statki mogą poruszać się po planszy, wystrzeliwać pociski oraz wykrywać 
 przeciwników za pomocą lunety. Wygrywa ten gracz który zostanie jako ostatni na polu bitwy.
 
+Gra ma na celu oswojenie graczy z podstawami programowania w języku Ruby.
+
 
 ##Zasady gry:
 
